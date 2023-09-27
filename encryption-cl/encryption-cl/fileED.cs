@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 using System.Security.Cryptography;
-using System.Text;
-
 
 namespace encryption_cl
 {
@@ -9,17 +9,12 @@ namespace encryption_cl
     {
         private readonly IConfiguration _configuration;
 
-
-        public FileED()
+        private FileED(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json");  
-
-            _configuration = builder.Build();
+            _configuration = configuration;
         }
 
-        public string Encrypt(string inputFile)
+        public byte[] Encrypt(byte[] inputData)
         {
             using (Aes aes = Aes.Create())
             {
@@ -33,19 +28,16 @@ namespace encryption_cl
                     ms.Write(iv, 0, iv.Length);
                     using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
                     {
-                        byte[] dataBytes = Encoding.UTF8.GetBytes(inputFile);
-                        cs.Write(dataBytes, 0, dataBytes.Length);
+                        cs.Write(inputData, 0, inputData.Length);
                     }
 
-                    return Convert.ToBase64String(ms.ToArray());
+                    return ms.ToArray();
                 }
             }
         }
 
-        public string Decrypt(string inputFile)
+        public byte[] Decrypt(byte[] encryptedData)
         {
-            byte[] encryptedBytes = Convert.FromBase64String(inputFile);
-
             using (Aes aes = Aes.Create())
             {
                 aes.KeySize = 256;
@@ -53,23 +45,43 @@ namespace encryption_cl
                 byte[] iv = new byte[aes.IV.Length];
                 byte[] decryptedBytes;
 
-                Array.Copy(encryptedBytes, iv, iv.Length);
+                Array.Copy(encryptedData, iv, iv.Length);
 
                 using (var decryptor = aes.CreateDecryptor(keyBytes, iv))
                 using (var ms = new MemoryStream())
                 {
                     using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
                     {
-                        cs.Write(encryptedBytes, iv.Length, encryptedBytes.Length - iv.Length);
+                        cs.Write(encryptedData, iv.Length, encryptedData.Length - iv.Length);
                     }
 
                     decryptedBytes = ms.ToArray();
                 }
 
-                return Encoding.UTF8.GetString(decryptedBytes);
+                return decryptedBytes;
             }
         }
 
+        public class FileEDBuilder
+        {
+            private IConfiguration _configuration;
+
+            public FileEDBuilder SetConfiguration(IConfiguration configuration)
+            {
+                _configuration = configuration;
+                return this;
+            }
+
+            public FileED Build()
+            {
+                if (_configuration == null)
+                {
+                    throw new InvalidOperationException("Configuration is required.");
+                }
+
+                return new FileED(_configuration);
+            }
+        }
 
         private byte[] HexToBytes(string hex)
         {
