@@ -1,6 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Extensions.Configuration;
 
 
 namespace encryption_cl
@@ -9,11 +9,12 @@ namespace encryption_cl
     {
         private readonly IConfiguration _configuration;
 
+
         public FileED()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("config.json"); 
+                .AddJsonFile("config.json");  
 
             _configuration = builder.Build();
         }
