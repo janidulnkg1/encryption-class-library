@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "eSkjlYpfftyr+Zdpg7i4rqFEX6bekvVXS3WtIlhi2dXE/P2ilfYsw+lKUigWRjpqFysq6NCF6HjJTRXBHFz2og==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Janidu Lankage\\Documents\\GitHub\\encryption-class-library\\encryption-cl\\encryption-cl\\encryption-cl.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Janidu Lankage\\.nuget\\packages\\microsoft.extensions.configuration\\7.0.0\\microsoft.extensions.configuration.7.0.0.nupkg.sha512",
+    "C:\\Users\\Janidu Lankage\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
+    "C:\\Users\\Janidu Lankage\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
