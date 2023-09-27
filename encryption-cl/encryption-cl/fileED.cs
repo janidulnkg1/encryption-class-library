@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 
@@ -71,7 +69,7 @@ namespace encryption_cl
             }
         }
 
-        // Helper method to convert a hex string to byte array
+
         private byte[] HexToBytes(string hex)
         {
             int numberChars = hex.Length;
