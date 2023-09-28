@@ -8,14 +8,14 @@ namespace encryption_cl.Key
 {
     public class KeyProvider
     {
-        private byte[] key;
+        private string key;
 
-        public byte[] GetKey()
+        public string GetKey()
         {
             return key;
         }
 
-        public void SetKey(byte[] key)
+        public void SetKey(string key)
         {
             this.key = key;
         }
