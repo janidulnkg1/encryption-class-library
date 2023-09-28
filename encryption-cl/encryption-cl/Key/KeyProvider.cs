@@ -19,5 +19,6 @@ namespace encryption_cl.Key
         {
             this.key = key;
         }
+
     }
 }
