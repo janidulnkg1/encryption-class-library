@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace encryption_cl
+namespace encryption_cl.Key
 {
     public interface IKeyProvider
     {
