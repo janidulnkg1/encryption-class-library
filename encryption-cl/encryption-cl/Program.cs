@@ -15,7 +15,7 @@ namespace encryption_cl
         {
             // Creating Key instance and set key value
             var key = new KeyProvider();
-            key.SetKey(/* key as byte[] */);
+            key.SetKey("");
 
             // Creating FileED instance with the IConfiguration 
             var builder = new FileED.FileEDBuilder();
@@ -26,7 +26,7 @@ namespace encryption_cl
             var fileED = builder.SetConfiguration(configuration).SetKeyProvider(key).Build();
 
           
-            byte[] inputData = /* input data as byte[] */;
+            byte[] inputData  /* input data as byte[] */;
 
             // Encrypt data
             byte[] encryptedData = fileED.Encrypt(inputData);
