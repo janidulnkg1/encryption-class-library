@@ -17,6 +17,12 @@ namespace encryption_cl.Key
 
         public void SetKey(string key)
         {
+            //ensuring use of a 256 bit key
+            if (key == null || key.Length != 32) 
+            {
+                throw new ArgumentException("Invalid key length. The key must be 256 bits (32 bytes).");
+            }
+
             this.key = key;
         }
 

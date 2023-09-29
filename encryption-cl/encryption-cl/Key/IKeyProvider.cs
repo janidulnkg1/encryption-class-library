@@ -8,7 +8,7 @@ namespace encryption_cl.Key
 {
     public interface IKeyProvider
     {
-        byte[] GetKey();
-        void SetKey(byte[] key);
+        string GetKey();
+        void SetKey(string key);
     }
 }

@@ -1,6 +1,9 @@
 ﻿using encryption_cl.Key;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 public class FileED
 {
@@ -18,7 +21,8 @@ public class FileED
         using (Aes aes = Aes.Create())
         {
             aes.KeySize = 256;
-            byte[] keyBytes = _keyProvider.GetKey();
+            string key = _keyProvider.GetKey(); // Getting encryption key as a string
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
             byte[] iv = aes.IV;
 
             using (var encryptor = aes.CreateEncryptor(keyBytes, iv))
@@ -40,7 +44,8 @@ public class FileED
         using (Aes aes = Aes.Create())
         {
             aes.KeySize = 256;
-            byte[] keyBytes = _keyProvider.GetKey();
+            string key = _keyProvider.GetKey(); // Getting the key as a string
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
             byte[] iv = new byte[aes.IV.Length];
             byte[] decryptedBytes;
 
@@ -60,6 +65,4 @@ public class FileED
             return decryptedBytes;
         }
     }
-
-
 }
