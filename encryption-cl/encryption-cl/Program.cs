@@ -1,12 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using encryption_cl.Key;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace encryption_cl
 {
-    internal class Program
+    class Program
     {
+        static void Main(string[] args)
+        {
+        
+            IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("config.json")
+                .Build();
+
+            // Get the encryption key from the configuration
+            string encryptionKey = configuration["EncryptionKey"];
+
+       
+            KeyProvider keyProvider = new KeyProvider();
+            keyProvider.SetKey(encryptionKey);
+
+           
+            FileED fileED = new FileED.FileEDBuilder()
+                .SetConfiguration(configuration)
+                .SetKeyProvider((IKeyProvider)keyProvider)
+                .Build();
+
+           
+        }
     }
 }
