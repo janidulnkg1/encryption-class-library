@@ -65,4 +65,33 @@ public class FileED
             return decryptedBytes;
         }
     }
+
+    public class FileEDBuilder
+    {
+        private IConfiguration _configuration;
+        private IKeyProvider _keyProvider;
+
+        public FileEDBuilder SetConfiguration(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            return this;
+        }
+
+        public FileEDBuilder SetKeyProvider(IKeyProvider keyProvider)
+        {
+            _keyProvider = keyProvider;
+            return this;
+        }
+
+        public FileED Build()
+        {
+            if (_configuration == null || _keyProvider == null)
+            {
+                throw new InvalidOperationException("Configuration and KeyProvider must be set.");
+            }
+
+            return new FileED(_configuration, _keyProvider);
+        }
+    }
+
 }

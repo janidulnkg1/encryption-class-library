@@ -17,7 +17,7 @@ namespace encryption_cl
             // Get the encryption key from the configuration
             string encryptionKey = configuration["EncryptionKey"];
 
-       
+      
             KeyProvider keyProvider = new KeyProvider();
             keyProvider.SetKey(encryptionKey);
 
