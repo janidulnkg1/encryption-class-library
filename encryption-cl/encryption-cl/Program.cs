@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
+
 namespace encryption_cl
 {
     class Program
@@ -21,7 +22,7 @@ namespace encryption_cl
             KeyProvider keyProvider = new KeyProvider();
             keyProvider.SetKey(encryptionKey);
 
-           
+
             FileED fileED = new FileED.FileEDBuilder()
                 .SetConfiguration(configuration)
                 .SetKeyProvider((IKeyProvider)keyProvider)

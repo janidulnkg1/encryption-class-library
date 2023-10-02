@@ -69,10 +69,8 @@ public class FileED
             return decryptedBytes;
         }
     }
-}
 
-
-public class FileEDBuilder
+    public class FileEDBuilder
     {
         private IConfiguration _configuration;
         private IKeyProvider _keyProvider;
@@ -99,5 +97,8 @@ public class FileEDBuilder
             return new FileED(_configuration, _keyProvider);
         }
     }
+
+}
+
 
 
