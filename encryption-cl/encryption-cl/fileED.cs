@@ -24,6 +24,7 @@ public class FileED
             string key = _keyProvider.GetKey(); // Getting encryption key as a string
             byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
             byte[] iv = aes.IV;
+            byte[] encryptedBytes;
 
             using (var encryptor = aes.CreateEncryptor(keyBytes, iv))
             using (var ms = new MemoryStream())
@@ -32,10 +33,12 @@ public class FileED
                 using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
                 {
                     cs.Write(inputData, 0, inputData.Length);
+                    cs.FlushFinalBlock(); // Flushing the final block
                 }
 
-                return ms.ToArray();
+                encryptedBytes =  ms.ToArray();
             }
+            return encryptedBytes;
         }
     }
 
@@ -57,6 +60,7 @@ public class FileED
                 using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
                 {
                     cs.Write(encryptedData, iv.Length, encryptedData.Length - iv.Length);
+                    cs.FlushFinalBlock(); // Flushing the final block
                 }
 
                 decryptedBytes = ms.ToArray();
@@ -65,8 +69,10 @@ public class FileED
             return decryptedBytes;
         }
     }
+}
 
-    public class FileEDBuilder
+
+public class FileEDBuilder
     {
         private IConfiguration _configuration;
         private IKeyProvider _keyProvider;
@@ -94,4 +100,4 @@ public class FileED
         }
     }
 
-}
+
