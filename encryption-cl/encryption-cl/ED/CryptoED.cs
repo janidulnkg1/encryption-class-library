@@ -8,66 +8,82 @@ using System.Text;
 public class CryptoED
 {
     private readonly IKeyProvider _keyProvider;
+    private readonly Guid _fallbackIV;
 
-    public CryptoED( IKeyProvider keyProvider)
+    public CryptoED(IKeyProvider keyProvider)
     {
         _keyProvider = keyProvider;
+        _fallbackIV = Guid.NewGuid();
     }
 
-    public byte[] Encrypt(byte[] inputData)
+    public byte[] Encrypt(byte[] inputData, Guid? customIV = null)
     {
-        using (Aes aes = Aes.Create())
+        try
         {
-            aes.KeySize = 256;
-            string key = _keyProvider.GetKey(); // Getting encryption key as a string
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
-            byte[] iv = aes.IV;
-            byte[] encryptedBytes;
-
-            using (var encryptor = aes.CreateEncryptor(keyBytes, iv))
-            using (var ms = new MemoryStream())
+            using (Aes aes = Aes.Create())
             {
-                ms.Write(iv, 0, iv.Length);
-                using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
-                {
-                    cs.Write(inputData, 0, inputData.Length);
-                    cs.FlushFinalBlock(); // Flushing the final block
-                }
+                aes.KeySize = 256;
+                string key = _keyProvider.GetKey(); // Getting encryption key as a string
+                byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
 
-                encryptedBytes =  ms.ToArray();
+                byte[] iv = customIV.HasValue ? customIV.Value.ToByteArray() : _fallbackIV.ToByteArray();
+                byte[] encryptedBytes;
+
+                using (var encryptor = aes.CreateEncryptor(keyBytes, iv))
+                using (var ms = new MemoryStream())
+                {
+                    ms.Write(iv, 0, iv.Length);
+                    using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        cs.Write(inputData, 0, inputData.Length);
+                        cs.FlushFinalBlock(); // Flushing the final block
+                    }
+
+                    encryptedBytes = ms.ToArray();
+                }
+                return encryptedBytes;
             }
-            return encryptedBytes;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Encryption failed: " + ex.Message);
+            throw;
         }
     }
 
     public byte[] Decrypt(byte[] encryptedData)
     {
-        using (Aes aes = Aes.Create())
+        try
         {
-            aes.KeySize = 256;
-            string key = _keyProvider.GetKey(); // Getting the key as a string
-            byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
-            byte[] iv = new byte[aes.IV.Length];
-            byte[] decryptedBytes;
-
-            Array.Copy(encryptedData, iv, iv.Length);
-
-            using (var decryptor = aes.CreateDecryptor(keyBytes, iv))
-            using (var ms = new MemoryStream())
+            using (Aes aes = Aes.Create())
             {
-                using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
+                aes.KeySize = 256;
+                string key = _keyProvider.GetKey(); // Getting the key as a string
+                byte[] keyBytes = Encoding.UTF8.GetBytes(key); // Converting the string key to bytes
+                byte[] iv = new byte[aes.IV.Length];
+                byte[] decryptedBytes;
+
+                Array.Copy(encryptedData, iv, iv.Length);
+
+                using (var decryptor = aes.CreateDecryptor(keyBytes, iv))
+                using (var ms = new MemoryStream())
                 {
-                    cs.Write(encryptedData, iv.Length, encryptedData.Length - iv.Length);
-                    cs.FlushFinalBlock(); // Flushing the final block
+                    using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Write))
+                    {
+                        cs.Write(encryptedData, iv.Length, encryptedData.Length - iv.Length);
+                        cs.FlushFinalBlock(); // Flushing the final block
+                    }
+
+                    decryptedBytes = ms.ToArray();
                 }
 
-                decryptedBytes = ms.ToArray();
+                return decryptedBytes;
             }
-
-            return decryptedBytes;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Decryption failed: " + ex.Message);
+            throw;
         }
     }
 }
-
-
-

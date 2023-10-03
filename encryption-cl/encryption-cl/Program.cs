@@ -1,6 +1,7 @@
 ﻿using encryption_cl.Key;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using encryption_cl.ED;
 
 
 namespace encryption_cl
@@ -9,26 +10,23 @@ namespace encryption_cl
     {
         static void Main(string[] args)
         {
-        
+
+            // Get the encryption key from the configuration
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("config.json")
                 .Build();
 
-            // Get the encryption key from the configuration
             string encryptionKey = configuration["EncryptionKey"];
 
-      
             KeyProvider keyProvider = new KeyProvider();
             keyProvider.SetKey(encryptionKey);
 
-
-            CryptoED fileED = new CryptoED.CryptoEDBuilder()
-                .SetConfiguration(configuration)
-                .SetKeyProvider((IKeyProvider)keyProvider)
+            CryptoEDBuilder cryptoED = new CryptoEDBuilder()
+                .SetKeyProvider(keyProvider)
                 .Build();
 
-           
+
         }
     }
 }
