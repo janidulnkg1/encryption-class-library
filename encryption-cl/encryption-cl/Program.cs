@@ -23,7 +23,7 @@ namespace encryption_cl
             keyProvider.SetKey(encryptionKey);
 
 
-            FileED fileED = new FileED.FileEDBuilder()
+            CryptoED fileED = new CryptoED.CryptoEDBuilder()
                 .SetConfiguration(configuration)
                 .SetKeyProvider((IKeyProvider)keyProvider)
                 .Build();

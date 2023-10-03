@@ -5,14 +5,12 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-public class FileED
+public class CryptoED
 {
-    private readonly IConfiguration _configuration;
     private readonly IKeyProvider _keyProvider;
 
-    public FileED(IConfiguration configuration, IKeyProvider keyProvider)
+    public CryptoED( IKeyProvider keyProvider)
     {
-        _configuration = configuration;
         _keyProvider = keyProvider;
     }
 
@@ -69,35 +67,6 @@ public class FileED
             return decryptedBytes;
         }
     }
-
-    public class FileEDBuilder
-    {
-        private IConfiguration _configuration;
-        private IKeyProvider _keyProvider;
-
-        public FileEDBuilder SetConfiguration(IConfiguration configuration)
-        {
-            _configuration = configuration;
-            return this;
-        }
-
-        public FileEDBuilder SetKeyProvider(IKeyProvider keyProvider)
-        {
-            _keyProvider = keyProvider;
-            return this;
-        }
-
-        public FileED Build()
-        {
-            if (_configuration == null || _keyProvider == null)
-            {
-                throw new InvalidOperationException("Configuration and KeyProvider must be set.");
-            }
-
-            return new FileED(_configuration, _keyProvider);
-        }
-    }
-
 }
 
 
