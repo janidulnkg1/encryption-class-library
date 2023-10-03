@@ -22,8 +22,8 @@ namespace encryption_cl
             KeyProvider keyProvider = new KeyProvider();
             keyProvider.SetKey(encryptionKey);
 
-            CryptoEDBuilder cryptoED = new CryptoEDBuilder()
-                .SetKeyProvider(keyProvider)
+            CryptoEDBuilder cryptoED = new CryptoEDBuilder();
+                cryptoED.SetKeyProvider(keyProvider)
                 .Build();
 
 
