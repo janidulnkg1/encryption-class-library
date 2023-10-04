@@ -1,8 +1,7 @@
-﻿using encryption_cl.Key;
-using Microsoft.Extensions.Configuration;
+﻿uusing Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
-using encryption_cl.ED;
-
+using encryption_cl.Key;
 
 namespace encryption_cl
 {
@@ -10,7 +9,6 @@ namespace encryption_cl
     {
         static void Main(string[] args)
         {
-
             // Get the encryption key from the configuration
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -19,14 +17,21 @@ namespace encryption_cl
 
             string encryptionKey = configuration["EncryptionKey"];
 
-            KeyProvider keyProvider = new KeyProvider();
-            keyProvider.SetKey(encryptionKey);
+            // Create a KeyProvider and set the encryption key
+            IKeyProvider keyProvider = new MyKeyProvider(encryptionKey);
 
-            CryptoEDBuilder cryptoED = new CryptoEDBuilder();
-                cryptoED.SetKeyProvider(keyProvider)
-                .Build();
+            // Create a CryptoEDBuilder and configure it with the KeyProvider
+            CryptoEDBuilder cryptoEDBuilder = new CryptoEDBuilder();
+            cryptoEDBuilder.SetKeyProvider(keyProvider);
 
+            // Build the CryptoED object
+            CryptoED cryptoED = cryptoEDBuilder.Build();
 
+            // Now you can use the cryptoED object for encryption and decryption operations
+            // Example: byte[] encryptedData = cryptoED.Encrypt(Encoding.UTF8.GetBytes("your data"));
+
+            Console.WriteLine("Encryption and decryption setup complete.");
         }
     }
 }
+
