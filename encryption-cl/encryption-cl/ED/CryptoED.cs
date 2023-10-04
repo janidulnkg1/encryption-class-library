@@ -10,17 +10,21 @@ public class CryptoED
     private readonly IKeyProvider _keyProvider;
     private readonly Guid _fallbackIV;
 
-    public IKeyProvider KeyProvider { get; }
+    public IKeyProvider KeyProvider
+    {
+        get { return _keyProvider; }
+    }
 
     public CryptoED(IConfiguration _configuration, IKeyProvider keyProvider)
     {
-        _keyProvider = keyProvider;
+        _keyProvider = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
         _fallbackIV = Guid.NewGuid();
     }
 
     public CryptoED(IKeyProvider keyProvider)
     {
-        KeyProvider = keyProvider;
+        _keyProvider = keyProvider ?? throw new ArgumentNullException(nameof(keyProvider));
+        _fallbackIV = Guid.NewGuid();
     }
 
     public byte[] Encrypt(byte[] inputData, Guid? customIV = null)
