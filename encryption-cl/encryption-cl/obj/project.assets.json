@@ -538,7 +538,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\Janidu Lankage\\Documents\\GitHub\\encryption-class-library\\encryption-cl\\encryption-cl\\encryption-cl.csproj",
-      "projectName": "encryption-cl",
+      "projectName": "CCAuthLib",
       "projectPath": "C:\\Users\\Janidu Lankage\\Documents\\GitHub\\encryption-class-library\\encryption-cl\\encryption-cl\\encryption-cl.csproj",
       "packagesPath": "C:\\Users\\Janidu Lankage\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Janidu Lankage\\Documents\\GitHub\\encryption-class-library\\encryption-cl\\encryption-cl\\obj\\",
