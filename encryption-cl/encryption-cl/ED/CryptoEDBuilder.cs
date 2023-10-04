@@ -22,5 +22,9 @@ namespace encryption_cl.ED
             return new CryptoED(_keyProvider);
         }
 
+        internal void SetKeyProvider(KeyProvider keyProvider)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
